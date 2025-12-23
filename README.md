@@ -7,10 +7,13 @@
 - Browsers: Chromium
 
 ## How to install Playwright
-npx playwright install
+npm init playwright@latest
 
 ## How to Run Test
 npx playwright test
+
+## How to open test report
+npx playwright show-report
 
 ## Test Description
 This script automates the signup flow of:

@@ -15,9 +15,5 @@ npx playwright test
 ## How to open test report
 npx playwright show-report
 
-## Test Description
-This script automates the signup flow of:
-https://authorized-partner.vercel.app/
 
-## Test Data
-Dummy user data used for testing.
+

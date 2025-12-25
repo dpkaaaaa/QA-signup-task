@@ -1,15 +1,20 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
 import { test, expect } from '@playwright/test';
 
 test.describe('Signup Flow', () => {
   test('should complete signup with OTP verification', async ({ page }) => {
     test.setTimeout(120000);
 
-    await page.goto(process.env.BASE_URL, {
+    await page.goto('https://authorized-partner.vercel.app/', {
       waitUntil: 'domcontentloaded',
     });
 
     await expect(page).toHaveURL(/authorized-partner/);
-    await page.getByText('Get Started').click();
+    await page.locator('button.bg-primary', { hasText: 'Get Started' }).click();
+
+
 
     const termsCheckbox = page.locator('#remember');
     const continueButton = page.getByRole('button', { name: 'Continue' });
@@ -18,7 +23,7 @@ test.describe('Signup Flow', () => {
     await termsCheckbox.check();
     await continueButton.click();
 
-    
+
     await expect(page.locator('input[name="firstName"]')).toBeVisible();
 
     await page.fill('input[name="firstName"]', process.env.FIRST_NAME);
@@ -30,11 +35,16 @@ test.describe('Signup Flow', () => {
 
     await page.getByRole('button', { name: 'Next' }).click();
 
+    // Locate OTP inputs
     const otpInputs = page.locator('input[data-input-otp="true"]');
-    await expect(otpInputs.first()).toBeVisible({ timeout: 120000 });
-    await expect(otpInputs).toHaveCount(6);
+
+
+    await otpInputs.first().waitFor({ state: 'visible', timeout: 120000 });
+
+    await expect(otpInputs).toHaveCount(6, { timeout: 120000 });
 
     await page.pause();
+
 
     await page.getByRole('button', { name: 'Verify Code' }).click();
   });
